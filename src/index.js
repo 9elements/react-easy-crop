@@ -63,13 +63,18 @@ class Cropper extends React.Component {
 
   computeSizes = () => {
     if (this.image) {
+      const { width, height } = this.image.getBoundingClientRect()
+
+      const neutralWidth = width / this.props.zoom
+      const neutralHeight = height / this.props.zoom
+
       this.imageSize = {
-        width: this.image.width,
-        height: this.image.height,
+        width: neutralWidth,
+        height: neutralHeight,
         naturalWidth: this.image.naturalWidth,
         naturalHeight: this.image.naturalHeight,
       }
-      const cropSize = getCropSize(this.image.width, this.image.height, this.props.aspect)
+      const cropSize = getCropSize(neutralWidth, neutralHeight, this.props.aspect)
       this.setState({ cropSize }, this.recomputeCropPosition)
     }
     if (this.container) {
