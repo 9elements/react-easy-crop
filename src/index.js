@@ -8,7 +8,7 @@ import {
 } from './helpers'
 import { Container, Img, CropArea } from './styles'
 
-const MIN_ZOOM = 1
+const MIN_ZOOM = 0.7
 const MAX_ZOOM = 3
 
 class Cropper extends React.Component {
@@ -256,6 +256,24 @@ class Cropper extends React.Component {
       classes: { containerClassName, cropAreaClassName, imageClassName },
     } = this.props
 
+    let patchedX = x
+    let patchedY = y
+
+    if (this.imageSize && this.state.cropSize) {
+      const currentImageWidth = this.imageSize.width * zoom
+      const currentImageHeight = this.imageSize.height * zoom
+
+      if (zoom < 1) {
+        if (currentImageWidth < this.state.cropSize.width) {
+          patchedX = 0
+        }
+
+        if (currentImageHeight < this.state.cropSize.height) {
+          patchedY = 0
+        }
+      }
+    }
+
     return (
       <Container
         onMouseDown={this.onMouseDown}
@@ -273,11 +291,11 @@ class Cropper extends React.Component {
           onError={this.props.onImgError}
           alt=""
           style={{
-            transform: `translate(${x}px, ${y}px) scale(${zoom})`,
+            transform: `translate(${patchedX}px, ${patchedY}px) scale(${zoom})`,
           }}
           imageStyle={imageStyle}
           className={imageClassName}
-        />
+        />;
         {this.state.cropSize && (
           <CropArea
             cropShape={cropShape}
