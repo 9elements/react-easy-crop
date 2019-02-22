@@ -265,11 +265,11 @@ class Cropper extends React.Component {
 
       if (zoom < 1) {
         if (currentImageWidth < this.state.cropSize.width) {
-          patchedX = 0
+          patchedX = -1
         }
 
         if (currentImageHeight < this.state.cropSize.height) {
-          patchedY = 0
+          patchedY = -1
         }
       }
     }
