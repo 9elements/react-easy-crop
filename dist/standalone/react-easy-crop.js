@@ -2525,7 +2525,7 @@ styleSheet.flush()
               : (subClass.__proto__ = superClass)
         }
 
-        var MIN_ZOOM = 1
+        var MIN_ZOOM = 0.7
         var MAX_ZOOM = 3
 
         var Cropper = (function(_React$Component) {
@@ -2828,6 +2828,24 @@ styleSheet.flush()
                   cropAreaClassName = _props$classes.cropAreaClassName,
                   imageClassName = _props$classes.imageClassName
 
+                var patchedX = x
+                var patchedY = y
+
+                if (this.imageSize && this.state.cropSize) {
+                  var currentImageWidth = this.imageSize.width * zoom
+                  var currentImageHeight = this.imageSize.height * zoom
+
+                  if (zoom < 1) {
+                    if (currentImageWidth < this.state.cropSize.width) {
+                      patchedX = -1
+                    }
+
+                    if (currentImageHeight < this.state.cropSize.height) {
+                      patchedY = -1
+                    }
+                  }
+                }
+
                 return _react2.default.createElement(
                   _styles.Container,
                   {
@@ -2850,11 +2868,13 @@ styleSheet.flush()
                     onError: this.props.onImgError,
                     alt: '',
                     style: {
-                      transform: 'translate(' + x + 'px, ' + y + 'px) scale(' + zoom + ')',
+                      transform:
+                        'translate(' + patchedX + 'px, ' + patchedY + 'px) scale(' + zoom + ')',
                     },
                     imageStyle: imageStyle,
                     className: imageClassName,
                   }),
+                  ';',
                   this.state.cropSize &&
                     _react2.default.createElement(_styles.CropArea, {
                       cropShape: cropShape,
