@@ -226,11 +226,13 @@ class Cropper extends React.Component {
       this.props.zoom
     )
     const { croppedAreaPercentages, croppedAreaPixels } = computeCroppedArea(
+      this.image,
       restrictedPosition,
       this.imageSize,
       this.state.cropSize,
       this.props.zoom
     )
+
     this.props.onCropComplete &&
       this.props.onCropComplete(croppedAreaPercentages, croppedAreaPixels)
   }
