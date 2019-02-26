@@ -255,6 +255,7 @@ var Cropper = (function(_React$Component) {
         )
 
         var _computeCroppedArea = (0, _helpers.computeCroppedArea)(
+            _this.image,
             restrictedPosition,
             _this.imageSize,
             _this.state.cropSize,

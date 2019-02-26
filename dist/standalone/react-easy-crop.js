@@ -2394,12 +2394,13 @@ styleSheet.flush()
         /**
          * Compute the output cropped area of the image in percentages and pixels.
          * x/y are the top-left coordinates on the src image
+         * @param HTMLImgElement image - the image element
          * @param {{x: number, y number}} crop x/y position of the current center of the image
          * @param {{width: number, height: number, naturalWidth: number, naturelHeight: number}} imageSize width/height of the src image (default is size on the screen, natural is the original size)
          * @param {{width: number, height: number}} cropSize width/height of the crop area
          * @param {number} zoom zoom value
          */
-        function computeCroppedArea(crop, imgSize, cropSize, zoom) {
+        function computeCroppedArea(image, crop, imgSize, cropSize, zoom) {
           var croppedAreaPercentages = {
             x: limitArea(
               100,
@@ -2412,7 +2413,29 @@ styleSheet.flush()
             ),
             width: limitArea(100, ((cropSize.width / imgSize.width) * 100) / zoom),
             height: limitArea(100, ((cropSize.height / imgSize.height) * 100) / zoom),
+            croppedX: false,
+            croppedY: false,
           }
+
+          if (zoom < 1) {
+            var _image$getBoundingCli = image.getBoundingClientRect(),
+              width = _image$getBoundingCli.width,
+              height = _image$getBoundingCli.height
+
+            var imageWidth = width
+            var imageHeight = height
+
+            if (imageWidth < cropSize.width) {
+              croppedAreaPercentages.x = (cropSize.width - imageWidth) / 2
+              croppedAreaPercentages.croppedX = true
+            }
+
+            if (imageHeight < cropSize.height) {
+              croppedAreaPercentages.y = (cropSize.height - imageHeight) / 2
+              croppedAreaPercentages.croppedY = true
+            }
+          }
+
           var croppedAreaPixels = {
             x: limitArea(
               imgSize.naturalWidth,
@@ -2430,6 +2453,8 @@ styleSheet.flush()
               imgSize.naturalHeight,
               (croppedAreaPercentages.height * imgSize.naturalHeight) / 100
             ),
+            croppedX: croppedAreaPercentages.croppedX,
+            croppedY: croppedAreaPercentages.croppedY,
           }
           return {
             croppedAreaPercentages: croppedAreaPercentages,
@@ -2723,6 +2748,7 @@ styleSheet.flush()
                 )
 
                 var _computeCroppedArea = (0, _helpers.computeCroppedArea)(
+                    _this.image,
                     restrictedPosition,
                     _this.imageSize,
                     _this.state.cropSize,
