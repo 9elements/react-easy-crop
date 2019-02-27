@@ -71,13 +71,18 @@ export function computeCroppedArea(image, crop, imgSize, cropSize, zoom) {
     let imageWidth = width
     let imageHeight = height
 
+    const leftWidthSpace = (cropSize.width - imageWidth) / 2
+    const leftHeightSpace = (cropSize.height - imageHeight) / 2
+
     if (imageWidth < cropSize.width) {
-      croppedAreaPercentages.x = (cropSize.width - imageWidth) / 2
+      // Image width is smaller then the field it is placed in
+      croppedAreaPercentages.x = leftWidthSpace
       croppedAreaPercentages.croppedX = true
     }
 
     if (imageHeight < cropSize.height) {
-      croppedAreaPercentages.y = (cropSize.height - imageHeight) / 2
+      // Image height is smaller then the field it is placed in
+      croppedAreaPercentages.y = leftHeightSpace
       croppedAreaPercentages.croppedY = true
     }
   }
