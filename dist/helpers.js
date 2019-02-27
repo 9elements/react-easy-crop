@@ -77,25 +77,24 @@ function computeCroppedArea(image, crop, imgSize, cropSize, zoom) {
   }
 
   if (zoom < 1) {
-    var _image$getBoundingCli = image.getBoundingClientRect(),
-      width = _image$getBoundingCli.width,
-      height = _image$getBoundingCli.height
+    var width = imgSize.width,
+      height = imgSize.height
 
-    var imageWidth = width
-    var imageHeight = height
+    var imageWidth = width * zoom
+    var imageHeight = height * zoom
 
     var leftWidthSpace = (cropSize.width - imageWidth) / 2
     var leftHeightSpace = (cropSize.height - imageHeight) / 2
 
     if (imageWidth < cropSize.width) {
       // Image width is smaller then the field it is placed in
-      croppedAreaPercentages.x = leftWidthSpace
+      croppedAreaPercentages.x = (100 / cropSize.width) * leftWidthSpace
       croppedAreaPercentages.croppedX = true
     }
 
     if (imageHeight < cropSize.height) {
       // Image height is smaller then the field it is placed in
-      croppedAreaPercentages.y = leftHeightSpace
+      croppedAreaPercentages.y = (100 / cropSize.height) * leftHeightSpace
       croppedAreaPercentages.croppedY = true
     }
   }
