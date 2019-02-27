@@ -118,16 +118,38 @@ var Cropper = (function(_React$Component) {
             width = _this$image$getBoundi.width,
             height = _this$image$getBoundi.height
 
-          var neutralWidth = width / _this.props.zoom
-          var neutralHeight = height / _this.props.zoom
+          var imageStyleWidth = parseFloat(_this.props.style.imageStyle.width)
+          var imageStyleHeight = parseFloat(_this.props.style.imageStyle.height)
+
+          var boundingWidth = Math.max(window.innerWidth / 2, 770)
+          var boundingHeight = Math.max(window.innerHeight, 675)
+
+          if (window.innerWidth - 50 <= boundingWidth) {
+            boundingWidth = window.innerWidth - 50
+          }
+
+          if (window.innerHeight - 125 <= boundingHeight) {
+            boundingHeight = window.innerHeight - 125
+          }
+
+          var imageAspect = imageStyleWidth / imageStyleHeight
+          if (imageStyleWidth >= imageStyleHeight) {
+            boundingHeight = boundingWidth / imageAspect
+          } else {
+            boundingWidth = boundingHeight * imageAspect
+          }
 
           _this.imageSize = {
-            width: neutralWidth,
-            height: neutralHeight,
+            width: boundingWidth,
+            height: boundingHeight,
             naturalWidth: _this.image.naturalWidth,
             naturalHeight: _this.image.naturalHeight,
           }
-          var cropSize = (0, _helpers.getCropSize)(neutralWidth, neutralHeight, _this.props.aspect)
+          var cropSize = (0, _helpers.getCropSize)(
+            boundingWidth,
+            boundingHeight,
+            _this.props.aspect
+          )
           _this.setState({ cropSize: cropSize }, _this.recomputeCropPosition)
         }
         if (_this.container) {
@@ -389,7 +411,11 @@ var Cropper = (function(_React$Component) {
               return (_this3.container = el)
             },
             'data-testid': 'container',
-            containerStyle: containerStyle,
+            containerStyle: {
+              position: 'relative',
+              width: this.imageSize.width,
+              height: this.imageSize.height,
+            },
             className: containerClassName,
           },
           _react2.default.createElement(_styles.Img, {
@@ -403,7 +429,11 @@ var Cropper = (function(_React$Component) {
             style: {
               transform: 'translate(' + patchedX + 'px, ' + patchedY + 'px) scale(' + zoom + ')',
             },
-            imageStyle: imageStyle,
+            imageStyle: {
+              width: this.imageSize.width,
+              height: this.imageSize.height,
+              minHeight: this.imageSize.height,
+            },
             className: imageClassName,
           }),
           ';',

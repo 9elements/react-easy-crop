@@ -64,17 +64,34 @@ class Cropper extends React.Component {
   computeSizes = () => {
     if (this.image) {
       const { width, height } = this.image.getBoundingClientRect()
+      const imageStyleWidth = parseFloat(this.props.style.imageStyle.width)
+      const imageStyleHeight = parseFloat(this.props.style.imageStyle.height)
 
-      const neutralWidth = width / this.props.zoom
-      const neutralHeight = height / this.props.zoom
+      let boundingWidth = Math.max(window.innerWidth / 2, 770)
+      let boundingHeight = Math.max(window.innerHeight, 675)
+
+      if (window.innerWidth - 50 <= boundingWidth) {
+        boundingWidth = window.innerWidth - 50
+      }
+
+      if (window.innerHeight - 125 <= boundingHeight) {
+        boundingHeight = window.innerHeight - 125
+      }
+
+      const imageAspect = imageStyleWidth / imageStyleHeight
+      if (imageStyleWidth >= imageStyleHeight) {
+        boundingHeight = boundingWidth / imageAspect
+      } else {
+        boundingWidth = boundingHeight * imageAspect
+      }
 
       this.imageSize = {
-        width: neutralWidth,
-        height: neutralHeight,
+        width: boundingWidth,
+        height: boundingHeight,
         naturalWidth: this.image.naturalWidth,
         naturalHeight: this.image.naturalHeight,
       }
-      const cropSize = getCropSize(neutralWidth, neutralHeight, this.props.aspect)
+      const cropSize = getCropSize(boundingWidth, boundingHeight, this.props.aspect)
       this.setState({ cropSize }, this.recomputeCropPosition)
     }
     if (this.container) {
@@ -283,7 +300,11 @@ class Cropper extends React.Component {
         onWheel={this.onWheel}
         innerRef={el => (this.container = el)}
         data-testid="container"
-        containerStyle={containerStyle}
+        containerStyle={{
+          position: 'relative',
+          width: this.imageSize.width,
+          height: this.imageSize.height,
+        }}
         className={containerClassName}
       >
         <Img
@@ -295,7 +316,11 @@ class Cropper extends React.Component {
           style={{
             transform: `translate(${patchedX}px, ${patchedY}px) scale(${zoom})`,
           }}
-          imageStyle={imageStyle}
+          imageStyle={{
+            width: this.imageSize.width,
+            height: this.imageSize.height,
+            minHeight: this.imageSize.height,
+          }}
           className={imageClassName}
         />;
         {this.state.cropSize && (
