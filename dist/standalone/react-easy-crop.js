@@ -2672,6 +2672,45 @@ styleSheet.flush()
                     width = _calculateCropSize.width,
                     height = _calculateCropSize.height
 
+                  var imageStyleWidth = parseFloat(_this.props.style.imageStyle.width).toFixed(2)
+                  var imageStyleHeight = parseFloat(_this.props.style.imageStyle.height).toFixed(2)
+                  var windowToleranceHeight = window.innerHeight - window.innerHeight * 0.3
+                  var windowToleranceWidth = window.innerWidth - 50
+
+                  var boundingWidth = Math.max(window.innerWidth / 2, 770)
+                  var _boundingHeight = Math.max(window.innerHeight, 675)
+
+                  if (windowToleranceWidth <= boundingWidth) {
+                    boundingWidth = windowToleranceWidth
+                  }
+
+                  if (windowToleranceHeight <= _boundingHeight) {
+                    _boundingHeight = windowToleranceHeight
+                  }
+
+                  var imageAspect = imageStyleWidth / imageStyleHeight
+                  if (imageStyleWidth > imageStyleHeight) {
+                    _boundingHeight = boundingWidth / imageAspect
+
+                    if (_boundingHeight > windowToleranceHeight) {
+                      _boundingHeight = windowToleranceHeight
+                      boundingWidth = windowToleranceHeight * imageAspect
+                    }
+                  } else if (imageStyleWidth === imageStyleHeight) {
+                    if (boundingWidth > _boundingHeight) {
+                      boundingWidth = _boundingHeight
+                    } else {
+                      _boundingHeight = boundingWidth
+                    }
+                  } else {
+                    boundingWidth = _boundingHeight * imageAspect
+
+                    if (boundingWidth > windowToleranceWidth) {
+                      boundingWidth = windowToleranceWidth
+                      _boundingHeight = windowToleranceWidth / imageAspect
+                    }
+                  }
+
                   _this.imageSize = {
                     width: width,
                     height: height,
@@ -2681,6 +2720,8 @@ styleSheet.flush()
                   var cropSize = (0, _helpers.getCropSize)(width, height, _this.props.aspect)
                   _this.setState({ cropSize: cropSize }, _this.recomputeCropPosition)
                 }
+
+                console.log(boundingHeight)
                 if (_this.container) {
                   _this.containerRect = _this.container.getBoundingClientRect()
                 }
