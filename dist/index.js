@@ -3,6 +3,7 @@
 Object.defineProperty(exports, '__esModule', {
   value: true,
 })
+exports.computeCroppedArea = exports.restrictPosition = undefined
 
 var _createClass = (function() {
   function defineProperties(target, props) {
@@ -20,6 +21,8 @@ var _createClass = (function() {
     return Constructor
   }
 })()
+
+exports.calculateCropSize = calculateCropSize
 
 var _react = require('react')
 
@@ -63,6 +66,52 @@ function _inherits(subClass, superClass) {
 
 var MIN_ZOOM = 0.7
 var MAX_ZOOM = 3
+
+exports.restrictPosition = _helpers.restrictPosition
+exports.computeCroppedArea = _helpers.computeCroppedArea
+function calculateCropSize(width, height) {
+  console.log('calculateCropSize', width, height)
+  var imageStyleWidth = parseFloat(width).toFixed(2)
+  var imageStyleHeight = parseFloat(height).toFixed(2)
+  var windowToleranceHeight = window.innerHeight - 200
+  var windowToleranceWidth = window.innerWidth - 50
+
+  var boundingWidth = Math.max(window.innerWidth / 2, 770)
+  var boundingHeight = Math.max(window.innerHeight, 675)
+
+  if (windowToleranceWidth <= boundingWidth) {
+    boundingWidth = windowToleranceWidth
+  }
+
+  if (windowToleranceHeight <= boundingHeight) {
+    boundingHeight = windowToleranceHeight
+  }
+
+  var imageAspect = imageStyleWidth / imageStyleHeight
+  if (imageStyleWidth > imageStyleHeight) {
+    boundingHeight = boundingWidth / imageAspect
+
+    if (boundingHeight > windowToleranceHeight) {
+      boundingHeight = windowToleranceHeight
+      boundingWidth = windowToleranceHeight * imageAspect
+    }
+  } else if (imageStyleWidth === imageStyleHeight) {
+    if (boundingWidth > boundingHeight) {
+      boundingWidth = boundingHeight
+    } else {
+      boundingHeight = boundingWidth
+    }
+  } else {
+    boundingWidth = boundingHeight * imageAspect
+
+    if (boundingWidth > windowToleranceWidth) {
+      boundingWidth = windowToleranceWidth
+      boundingHeight = windowToleranceWidth / imageAspect
+    }
+  }
+
+  return { width: boundingWidth, height: boundingHeight }
+}
 
 var Cropper = (function(_React$Component) {
   _inherits(Cropper, _React$Component)
@@ -114,56 +163,20 @@ var Cropper = (function(_React$Component) {
       }),
       (_this.computeSizes = function() {
         if (_this.image) {
-          var imageStyleWidth = parseFloat(_this.props.style.imageStyle.width).toFixed(2)
-          var imageStyleHeight = parseFloat(_this.props.style.imageStyle.height).toFixed(2)
-          var windowToleranceHeight = window.innerHeight - 200
-          var windowToleranceWidth = window.innerWidth - 50
-
-          var boundingWidth = Math.max(window.innerWidth / 2, 770)
-          var boundingHeight = Math.max(window.innerHeight, 675)
-
-          if (windowToleranceWidth <= boundingWidth) {
-            boundingWidth = windowToleranceWidth
-          }
-
-          if (windowToleranceHeight <= boundingHeight) {
-            boundingHeight = windowToleranceHeight
-          }
-
-          var imageAspect = imageStyleWidth / imageStyleHeight
-          if (imageStyleWidth > imageStyleHeight) {
-            boundingHeight = boundingWidth / imageAspect
-
-            if (boundingHeight > windowToleranceHeight) {
-              boundingHeight = windowToleranceHeight
-              boundingWidth = windowToleranceHeight * imageAspect
-            }
-          } else if (imageStyleWidth === imageStyleHeight) {
-            if (boundingWidth > boundingHeight) {
-              boundingWidth = boundingHeight
-            } else {
-              boundingHeight = boundingWidth
-            }
-          } else {
-            boundingWidth = boundingHeight * imageAspect
-
-            if (boundingWidth > windowToleranceWidth) {
-              boundingWidth = windowToleranceWidth
-              boundingHeight = windowToleranceWidth / imageAspect
-            }
-          }
+          var _calculateCropSize = calculateCropSize(
+              _this.props.style.imageStyle.width,
+              _this.props.style.imageStyle.height
+            ),
+            width = _calculateCropSize.width,
+            height = _calculateCropSize.height
 
           _this.imageSize = {
-            width: boundingWidth,
-            height: boundingHeight,
+            width: width,
+            height: height,
             naturalWidth: _this.image.naturalWidth,
             naturalHeight: _this.image.naturalHeight,
           }
-          var cropSize = (0, _helpers.getCropSize)(
-            boundingWidth,
-            boundingHeight,
-            _this.props.aspect
-          )
+          var cropSize = (0, _helpers.getCropSize)(width, height, _this.props.aspect)
           _this.setState({ cropSize: cropSize }, _this.recomputeCropPosition)
         }
         if (_this.container) {

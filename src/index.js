@@ -11,6 +11,52 @@ import { Container, Img, CropArea } from './styles'
 const MIN_ZOOM = 0.7
 const MAX_ZOOM = 3
 
+export { restrictPosition, computeCroppedArea }
+
+export function calculateCropSize(width, height) {
+  console.log('calculateCropSize', width, height)
+  const imageStyleWidth = parseFloat(width).toFixed(2)
+  const imageStyleHeight = parseFloat(height).toFixed(2)
+  const windowToleranceHeight = window.innerHeight - 200
+  const windowToleranceWidth = window.innerWidth - 50
+
+  let boundingWidth = Math.max(window.innerWidth / 2, 770)
+  let boundingHeight = Math.max(window.innerHeight, 675)
+
+  if (windowToleranceWidth <= boundingWidth) {
+    boundingWidth = windowToleranceWidth
+  }
+
+  if (windowToleranceHeight <= boundingHeight) {
+    boundingHeight = windowToleranceHeight
+  }
+
+  const imageAspect = imageStyleWidth / imageStyleHeight
+  if (imageStyleWidth > imageStyleHeight) {
+    boundingHeight = boundingWidth / imageAspect
+
+    if (boundingHeight > windowToleranceHeight) {
+      boundingHeight = windowToleranceHeight
+      boundingWidth = windowToleranceHeight * imageAspect
+    }
+  } else if (imageStyleWidth === imageStyleHeight) {
+    if (boundingWidth > boundingHeight) {
+      boundingWidth = boundingHeight
+    } else {
+      boundingHeight = boundingWidth
+    }
+  } else {
+    boundingWidth = boundingHeight * imageAspect
+
+    if (boundingWidth > windowToleranceWidth) {
+      boundingWidth = windowToleranceWidth
+      boundingHeight = windowToleranceWidth / imageAspect
+    }
+  }
+
+  return { width: boundingWidth, height: boundingHeight }
+}
+
 class Cropper extends React.Component {
   image = null
   container = null
@@ -63,52 +109,18 @@ class Cropper extends React.Component {
 
   computeSizes = () => {
     if (this.image) {
-      const imageStyleWidth = parseFloat(this.props.style.imageStyle.width).toFixed(2)
-      const imageStyleHeight = parseFloat(this.props.style.imageStyle.height).toFixed(2)
-      const windowToleranceHeight = window.innerHeight - 200
-      const windowToleranceWidth = window.innerWidth - 50
-
-      let boundingWidth = Math.max(window.innerWidth / 2, 770)
-      let boundingHeight = Math.max(window.innerHeight, 675)
-
-      if (windowToleranceWidth <= boundingWidth) {
-        boundingWidth = windowToleranceWidth
-      }
-
-      if (windowToleranceHeight <= boundingHeight) {
-        boundingHeight = windowToleranceHeight
-      }
-
-      const imageAspect = imageStyleWidth / imageStyleHeight
-      if (imageStyleWidth > imageStyleHeight) {
-        boundingHeight = boundingWidth / imageAspect
-
-        if (boundingHeight > windowToleranceHeight) {
-          boundingHeight = windowToleranceHeight
-          boundingWidth = windowToleranceHeight * imageAspect
-        }
-      } else if (imageStyleWidth === imageStyleHeight) {
-        if (boundingWidth > boundingHeight) {
-          boundingWidth = boundingHeight
-        } else {
-          boundingHeight = boundingWidth
-        }
-      } else {
-        boundingWidth = boundingHeight * imageAspect
-
-        if (boundingWidth > windowToleranceWidth) {
-          boundingWidth = windowToleranceWidth
-          boundingHeight = windowToleranceWidth / imageAspect
-        }
-      }
+      const { width, height } = calculateCropSize(
+        this.props.style.imageStyle.width,
+        this.props.style.imageStyle.height
+      )
 
       this.imageSize = {
-        width: boundingWidth,
-        height: boundingHeight,
+        width,
+        height,
         naturalWidth: this.image.naturalWidth,
         naturalHeight: this.image.naturalHeight,
       }
-      const cropSize = getCropSize(boundingWidth, boundingHeight, this.props.aspect)
+      const cropSize = getCropSize(width, height, this.props.aspect)
       this.setState({ cropSize }, this.recomputeCropPosition)
     }
     if (this.container) {
