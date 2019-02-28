@@ -63,26 +63,43 @@ class Cropper extends React.Component {
 
   computeSizes = () => {
     if (this.image) {
-      const { width, height } = this.image.getBoundingClientRect()
-      const imageStyleWidth = parseFloat(this.props.style.imageStyle.width)
-      const imageStyleHeight = parseFloat(this.props.style.imageStyle.height)
+      const imageStyleWidth = parseFloat(this.props.style.imageStyle.width).toFixed(2)
+      const imageStyleHeight = parseFloat(this.props.style.imageStyle.height).toFixed(2)
+      const windowToleranceHeight = window.innerHeight - 200
+      const windowToleranceWidth = window.innerWidth - 50
 
       let boundingWidth = Math.max(window.innerWidth / 2, 770)
       let boundingHeight = Math.max(window.innerHeight, 675)
 
-      if (window.innerWidth - 50 <= boundingWidth) {
-        boundingWidth = window.innerWidth - 50
+      if (windowToleranceWidth <= boundingWidth) {
+        boundingWidth = windowToleranceWidth
       }
 
-      if (window.innerHeight - 125 <= boundingHeight) {
-        boundingHeight = window.innerHeight - 125
+      if (windowToleranceHeight <= boundingHeight) {
+        boundingHeight = windowToleranceHeight
       }
 
       const imageAspect = imageStyleWidth / imageStyleHeight
-      if (imageStyleWidth >= imageStyleHeight) {
+      if (imageStyleWidth > imageStyleHeight) {
         boundingHeight = boundingWidth / imageAspect
+
+        if (boundingHeight > windowToleranceHeight) {
+          boundingHeight = windowToleranceHeight
+          boundingWidth = windowToleranceHeight * imageAspect
+        }
+      } else if (imageStyleWidth === imageStyleHeight) {
+        if (boundingWidth > boundingHeight) {
+          boundingWidth = boundingHeight
+        } else {
+          boundingHeight = boundingWidth
+        }
       } else {
         boundingWidth = boundingHeight * imageAspect
+
+        if (boundingWidth > windowToleranceWidth) {
+          boundingWidth = windowToleranceWidth
+          boundingHeight = windowToleranceWidth / imageAspect
+        }
       }
 
       this.imageSize = {
@@ -304,6 +321,7 @@ class Cropper extends React.Component {
           position: 'relative',
           width: this.imageSize.width,
           height: this.imageSize.height,
+          minHeight: this.imageSize.height,
         }}
         className={containerClassName}
       >

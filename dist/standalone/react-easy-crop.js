@@ -2607,29 +2607,43 @@ styleSheet.flush()
               }),
               (_this.computeSizes = function() {
                 if (_this.image) {
-                  var _this$image$getBoundi = _this.image.getBoundingClientRect(),
-                    width = _this$image$getBoundi.width,
-                    height = _this$image$getBoundi.height
-
-                  var imageStyleWidth = parseFloat(_this.props.style.imageStyle.width)
-                  var imageStyleHeight = parseFloat(_this.props.style.imageStyle.height)
+                  var imageStyleWidth = parseFloat(_this.props.style.imageStyle.width).toFixed(2)
+                  var imageStyleHeight = parseFloat(_this.props.style.imageStyle.height).toFixed(2)
+                  var windowToleranceHeight = window.innerHeight - 200
+                  var windowToleranceWidth = window.innerWidth - 50
 
                   var boundingWidth = Math.max(window.innerWidth / 2, 770)
                   var boundingHeight = Math.max(window.innerHeight, 675)
 
-                  if (window.innerWidth - 50 <= boundingWidth) {
-                    boundingWidth = window.innerWidth - 50
+                  if (windowToleranceWidth <= boundingWidth) {
+                    boundingWidth = windowToleranceWidth
                   }
 
-                  if (window.innerHeight - 125 <= boundingHeight) {
-                    boundingHeight = window.innerHeight - 125
+                  if (windowToleranceHeight <= boundingHeight) {
+                    boundingHeight = windowToleranceHeight
                   }
 
                   var imageAspect = imageStyleWidth / imageStyleHeight
-                  if (imageStyleWidth >= imageStyleHeight) {
+                  if (imageStyleWidth > imageStyleHeight) {
                     boundingHeight = boundingWidth / imageAspect
+
+                    if (boundingHeight > windowToleranceHeight) {
+                      boundingHeight = windowToleranceHeight
+                      boundingWidth = windowToleranceHeight * imageAspect
+                    }
+                  } else if (imageStyleWidth === imageStyleHeight) {
+                    if (boundingWidth > boundingHeight) {
+                      boundingWidth = boundingHeight
+                    } else {
+                      boundingHeight = boundingWidth
+                    }
                   } else {
                     boundingWidth = boundingHeight * imageAspect
+
+                    if (boundingWidth > windowToleranceWidth) {
+                      boundingWidth = windowToleranceWidth
+                      boundingHeight = windowToleranceWidth / imageAspect
+                    }
                   }
 
                   _this.imageSize = {
@@ -2908,6 +2922,7 @@ styleSheet.flush()
                       position: 'relative',
                       width: this.imageSize.width,
                       height: this.imageSize.height,
+                      minHeight: this.imageSize.height,
                     },
                     className: containerClassName,
                   },
