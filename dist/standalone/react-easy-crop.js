@@ -2570,7 +2570,12 @@ styleSheet.flush()
         function calculateCropSize(width, height) {
           var imageStyleWidth = parseFloat(width).toFixed(2)
           var imageStyleHeight = parseFloat(height).toFixed(2)
-          var windowToleranceHeight = window.innerHeight - 200
+
+          var heightDifference = 600
+          if (window.innerWidth <= 768) {
+            heightDifference = 200
+          }
+          var windowToleranceHeight = window.innerHeight - heightDifference
           var windowToleranceWidth = window.innerWidth - 50
 
           var boundingWidth = Math.max(window.innerWidth / 2, 770)

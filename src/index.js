@@ -16,7 +16,12 @@ export { getCropSize, restrictPosition, computeCroppedArea }
 export function calculateCropSize(width, height) {
   const imageStyleWidth = parseFloat(width).toFixed(2)
   const imageStyleHeight = parseFloat(height).toFixed(2)
-  const windowToleranceHeight = window.innerHeight - 200
+
+  let heightDifference = 600
+  if (window.innerWidth <= 768) {
+    heightDifference = 200
+  }
+  const windowToleranceHeight = window.innerHeight - heightDifference
   const windowToleranceWidth = window.innerWidth - 50
 
   let boundingWidth = Math.max(window.innerWidth / 2, 770)
