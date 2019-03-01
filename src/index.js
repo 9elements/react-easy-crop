@@ -17,7 +17,7 @@ export function calculateCropSize(width, height) {
   const imageStyleWidth = parseFloat(width).toFixed(2)
   const imageStyleHeight = parseFloat(height).toFixed(2)
 
-  let heightDifference = 600
+  let heightDifference = 350
   if (window.innerWidth <= 768) {
     heightDifference = 200
   }

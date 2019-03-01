@@ -2571,7 +2571,7 @@ styleSheet.flush()
           var imageStyleWidth = parseFloat(width).toFixed(2)
           var imageStyleHeight = parseFloat(height).toFixed(2)
 
-          var heightDifference = 600
+          var heightDifference = 350
           if (window.innerWidth <= 768) {
             heightDifference = 200
           }
