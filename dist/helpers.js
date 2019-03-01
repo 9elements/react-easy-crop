@@ -36,7 +36,11 @@ function getCropSize(imgWidth, imgHeight, aspect) {
  * @returns {{x: number, y number}}
  */
 function restrictPosition(position, imageSize, cropSize, zoom) {
-  console.log('restrictPosition', position)
+  console.log('restricPositoin', {
+    x: restrictPositionCoord(position.x, imageSize.width, cropSize.width, zoom),
+    y: restrictPositionCoord(position.y, imageSize.height, cropSize.height, zoom),
+  })
+
   return {
     x: restrictPositionCoord(position.x, imageSize.width, cropSize.width, zoom),
     y: restrictPositionCoord(position.y, imageSize.height, cropSize.height, zoom),
@@ -77,7 +81,7 @@ function computeCroppedArea(image, crop, imgSize, cropSize, zoom) {
     croppedY: false,
   }
 
-  console.log('ERWARTET:::::', crop, imgSize, cropSize, zoom)
+  console.log('computeCroppedArea', croppedAreaPercentages, crop, imgSize, cropSize, zoom)
 
   if (zoom < 1) {
     var width = imgSize.width,
@@ -106,7 +110,7 @@ function computeCroppedArea(image, crop, imgSize, cropSize, zoom) {
   croppedAreaPercentages.imgSize = imgSize
   croppedAreaPercentages.cropSize = cropSize
 
-  console.log('RESULT::::', croppedAreaPercentages)
+  // console.log('computeCroppedArea::Output', croppedAreaPercentages)
 
   var croppedAreaPixels = {
     x: limitArea(imgSize.naturalWidth, (croppedAreaPercentages.x * imgSize.naturalWidth) / 100),

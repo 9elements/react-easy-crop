@@ -2376,7 +2376,11 @@ styleSheet.flush()
          * @returns {{x: number, y number}}
          */
         function restrictPosition(position, imageSize, cropSize, zoom) {
-          console.log('restrictPosition', position)
+          console.log('restricPositoin', {
+            x: restrictPositionCoord(position.x, imageSize.width, cropSize.width, zoom),
+            y: restrictPositionCoord(position.y, imageSize.height, cropSize.height, zoom),
+          })
+
           return {
             x: restrictPositionCoord(position.x, imageSize.width, cropSize.width, zoom),
             y: restrictPositionCoord(position.y, imageSize.height, cropSize.height, zoom),
@@ -2418,7 +2422,7 @@ styleSheet.flush()
             croppedY: false,
           }
 
-          console.log('ERWARTET:::::', crop, imgSize, cropSize, zoom)
+          console.log('computeCroppedArea', croppedAreaPercentages, crop, imgSize, cropSize, zoom)
 
           if (zoom < 1) {
             var width = imgSize.width,
@@ -2447,7 +2451,7 @@ styleSheet.flush()
           croppedAreaPercentages.imgSize = imgSize
           croppedAreaPercentages.cropSize = cropSize
 
-          console.log('RESULT::::', croppedAreaPercentages)
+          // console.log('computeCroppedArea::Output', croppedAreaPercentages)
 
           var croppedAreaPixels = {
             x: limitArea(
@@ -2505,7 +2509,7 @@ styleSheet.flush()
         Object.defineProperty(exports, '__esModule', {
           value: true,
         })
-        exports.computeCroppedArea = exports.restrictPosition = undefined
+        exports.computeCroppedArea = exports.restrictPosition = exports.getCropSize = undefined
 
         var _createClass = (function() {
           function defineProperties(target, props) {
@@ -2569,10 +2573,10 @@ styleSheet.flush()
         var MIN_ZOOM = 0.7
         var MAX_ZOOM = 3
 
+        exports.getCropSize = _helpers.getCropSize
         exports.restrictPosition = _helpers.restrictPosition
         exports.computeCroppedArea = _helpers.computeCroppedArea
         function calculateCropSize(width, height) {
-          console.log('calculateCropSize', width, height)
           var imageStyleWidth = parseFloat(width).toFixed(2)
           var imageStyleHeight = parseFloat(height).toFixed(2)
           var windowToleranceHeight = window.innerHeight - 200
@@ -2672,45 +2676,6 @@ styleSheet.flush()
                     width = _calculateCropSize.width,
                     height = _calculateCropSize.height
 
-                  var imageStyleWidth = parseFloat(_this.props.style.imageStyle.width).toFixed(2)
-                  var imageStyleHeight = parseFloat(_this.props.style.imageStyle.height).toFixed(2)
-                  var windowToleranceHeight = window.innerHeight - window.innerHeight * 0.3
-                  var windowToleranceWidth = window.innerWidth - 50
-
-                  var boundingWidth = Math.max(window.innerWidth / 2, 770)
-                  var _boundingHeight = Math.max(window.innerHeight, 675)
-
-                  if (windowToleranceWidth <= boundingWidth) {
-                    boundingWidth = windowToleranceWidth
-                  }
-
-                  if (windowToleranceHeight <= _boundingHeight) {
-                    _boundingHeight = windowToleranceHeight
-                  }
-
-                  var imageAspect = imageStyleWidth / imageStyleHeight
-                  if (imageStyleWidth > imageStyleHeight) {
-                    _boundingHeight = boundingWidth / imageAspect
-
-                    if (_boundingHeight > windowToleranceHeight) {
-                      _boundingHeight = windowToleranceHeight
-                      boundingWidth = windowToleranceHeight * imageAspect
-                    }
-                  } else if (imageStyleWidth === imageStyleHeight) {
-                    if (boundingWidth > _boundingHeight) {
-                      boundingWidth = _boundingHeight
-                    } else {
-                      _boundingHeight = boundingWidth
-                    }
-                  } else {
-                    boundingWidth = _boundingHeight * imageAspect
-
-                    if (boundingWidth > windowToleranceWidth) {
-                      boundingWidth = windowToleranceWidth
-                      _boundingHeight = windowToleranceWidth / imageAspect
-                    }
-                  }
-
                   _this.imageSize = {
                     width: width,
                     height: height,
@@ -2721,7 +2686,6 @@ styleSheet.flush()
                   _this.setState({ cropSize: cropSize }, _this.recomputeCropPosition)
                 }
 
-                console.log(boundingHeight)
                 if (_this.container) {
                   _this.containerRect = _this.container.getBoundingClientRect()
                 }
