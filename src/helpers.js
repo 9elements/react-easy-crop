@@ -26,11 +26,6 @@ export function getCropSize(imgWidth, imgHeight, aspect) {
  * @returns {{x: number, y number}}
  */
 export function restrictPosition(position, imageSize, cropSize, zoom) {
-  console.log('restricPositoin', {
-    x: restrictPositionCoord(position.x, imageSize.width, cropSize.width, zoom),
-    y: restrictPositionCoord(position.y, imageSize.height, cropSize.height, zoom),
-  })
-
   return {
     x: restrictPositionCoord(position.x, imageSize.width, cropSize.width, zoom),
     y: restrictPositionCoord(position.y, imageSize.height, cropSize.height, zoom),

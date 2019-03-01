@@ -2376,11 +2376,6 @@ styleSheet.flush()
          * @returns {{x: number, y number}}
          */
         function restrictPosition(position, imageSize, cropSize, zoom) {
-          console.log('restricPositoin', {
-            x: restrictPositionCoord(position.x, imageSize.width, cropSize.width, zoom),
-            y: restrictPositionCoord(position.y, imageSize.height, cropSize.height, zoom),
-          })
-
           return {
             x: restrictPositionCoord(position.x, imageSize.width, cropSize.width, zoom),
             y: restrictPositionCoord(position.y, imageSize.height, cropSize.height, zoom),
@@ -2422,8 +2417,6 @@ styleSheet.flush()
             croppedY: false,
           }
 
-          console.log('computeCroppedArea', croppedAreaPercentages, crop, imgSize, cropSize, zoom)
-
           if (zoom < 1) {
             var width = imgSize.width,
               height = imgSize.height
@@ -2450,8 +2443,6 @@ styleSheet.flush()
           croppedAreaPercentages.crop = crop
           croppedAreaPercentages.imgSize = imgSize
           croppedAreaPercentages.cropSize = cropSize
-
-          // console.log('computeCroppedArea::Output', croppedAreaPercentages)
 
           var croppedAreaPixels = {
             x: limitArea(
