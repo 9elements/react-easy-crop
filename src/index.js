@@ -357,7 +357,7 @@ class Cropper extends React.Component {
             minHeight: this.imageSize.height,
           }}
           className={imageClassName}
-        />;
+        />
         {this.state.cropSize && (
           <CropArea
             cropShape={cropShape}

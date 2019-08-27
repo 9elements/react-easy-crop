@@ -470,7 +470,6 @@ var Cropper = (function(_React$Component) {
             },
             className: imageClassName,
           }),
-          ';',
           this.state.cropSize &&
             _react2.default.createElement(_styles.CropArea, {
               cropShape: cropShape,
