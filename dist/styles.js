@@ -68,7 +68,7 @@ var Mask = (exports.Mask = (0, _reactEmotion2.default)('div')(
     width: '100%',
     height: '100%',
     maskSize: 'contain',
-    maskRepeat: 'noRepeat',
+    maskRepeat: 'no-repeat',
     maskPosition: 'center',
   },
   function(_ref3) {

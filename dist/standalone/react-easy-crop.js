@@ -2279,7 +2279,7 @@ styleSheet.flush()
             width: '100%',
             height: '100%',
             maskSize: 'contain',
-            maskRepeat: 'noRepeat',
+            maskRepeat: 'no-repeat',
             maskPosition: 'center',
           },
           function(_ref3) {
@@ -2967,7 +2967,7 @@ styleSheet.flush()
                     _styles.Mask,
                     {
                       maskStyle: {
-                        maskUrl: this.props.maskUrl,
+                        mask: 'url(' + this.props.maskUrl + ')',
                       },
                     },
                     _react2.default.createElement(_styles.Img, {

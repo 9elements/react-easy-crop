@@ -456,7 +456,7 @@ var Cropper = (function(_React$Component) {
             _styles.Mask,
             {
               maskStyle: {
-                maskUrl: this.props.maskUrl,
+                mask: 'url(' + this.props.maskUrl + ')',
               },
             },
             _react2.default.createElement(_styles.Img, {

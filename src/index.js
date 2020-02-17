@@ -344,7 +344,7 @@ class Cropper extends React.Component {
       >
         <Mask
           maskStyle={{
-            maskUrl: this.props.maskUrl,
+            mask: `url(${this.props.maskUrl})`,
           }}
         >
           <Img
