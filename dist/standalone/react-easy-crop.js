@@ -2967,7 +2967,7 @@ styleSheet.flush()
                     _styles.Mask,
                     {
                       maskStyle: {
-                        mask: 'url(' + this.props.maskUrl + ')',
+                        maskImage: !!this.props.maskUrl ? 'url(' + this.props.maskUrl + ')' : null,
                       },
                     },
                     _react2.default.createElement(_styles.Img, {
