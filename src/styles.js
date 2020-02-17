@@ -30,6 +30,17 @@ export const Img = styled('img')(
   ({ imageStyle }) => ({ ...imageStyle })
 )
 
+export const Mask = styled('div')(
+  {
+    width: '100%',
+    height: '100%',
+    maskSize: 'contain',
+    maskRepeat: 'noRepeat',
+    maskPosition: 'center',
+  },
+  ({ maskStyle }) => ({ ...maskStyle })
+)
+
 const lineBorder = '1px solid rgba(255, 255, 255, 0.5)'
 const cropperLines = {
   content: '" "',

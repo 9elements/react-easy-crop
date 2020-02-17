@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', {
   value: true,
 })
-exports.CropArea = exports.Img = exports.Container = undefined
+exports.CropArea = exports.Mask = exports.Img = exports.Container = undefined
 
 var _extends =
   Object.assign ||
@@ -63,6 +63,20 @@ var Img = (exports.Img = (0, _reactEmotion2.default)('img')(
   }
 ))
 
+var Mask = (exports.Mask = (0, _reactEmotion2.default)('div')(
+  {
+    width: '100%',
+    height: '100%',
+    maskSize: 'contain',
+    maskRepeat: 'noRepeat',
+    maskPosition: 'center',
+  },
+  function(_ref3) {
+    var maskStyle = _ref3.maskStyle
+    return _extends({}, maskStyle)
+  }
+))
+
 var lineBorder = '1px solid rgba(255, 255, 255, 0.5)'
 var cropperLines = {
   content: '" "',
@@ -103,10 +117,10 @@ var roundShape = {
   borderRadius: '50%',
 }
 
-var CropArea = (exports.CropArea = (0, _reactEmotion2.default)('div')({}, function(_ref3) {
-  var cropShape = _ref3.cropShape,
-    showGrid = _ref3.showGrid,
-    cropAreaStyle = _ref3.cropAreaStyle
+var CropArea = (exports.CropArea = (0, _reactEmotion2.default)('div')({}, function(_ref4) {
+  var cropShape = _ref4.cropShape,
+    showGrid = _ref4.showGrid,
+    cropAreaStyle = _ref4.cropAreaStyle
   return _extends(
     {},
     (function() {

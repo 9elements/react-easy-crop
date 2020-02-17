@@ -6,7 +6,7 @@ import {
   computeCroppedArea,
   getCenter,
 } from './helpers'
-import { Container, Img, CropArea } from './styles'
+import { Container, Img, CropArea, Mask } from './styles'
 
 const MIN_ZOOM = 0.7
 const MAX_ZOOM = 3
@@ -342,35 +342,41 @@ class Cropper extends React.Component {
         }}
         className={containerClassName}
       >
-        <Img
-          src={this.props.image}
-          innerRef={el => (this.image = el)}
-          onLoad={this.onImgLoad}
-          onError={this.props.onImgError}
-          alt=""
-          style={{
-            transform: `translate(${patchedX}px, ${patchedY}px) scale(${zoom})`,
+        <Mask
+          maskStyle={{
+            maskUrl: this.props.maskUrl,
           }}
-          imageStyle={{
-            width: this.imageSize.width,
-            height: this.imageSize.height,
-            minHeight: this.imageSize.height,
-          }}
-          className={imageClassName}
-        />
-        {this.state.cropSize && (
-          <CropArea
-            cropShape={cropShape}
-            showGrid={showGrid}
+        >
+          <Img
+            src={this.props.image}
+            innerRef={el => (this.image = el)}
+            onLoad={this.onImgLoad}
+            onError={this.props.onImgError}
+            alt=""
             style={{
-              width: this.state.cropSize.width,
-              height: this.state.cropSize.height,
+              transform: `translate(${patchedX}px, ${patchedY}px) scale(${zoom})`,
             }}
-            data-testid="cropper"
-            cropAreaStyle={cropAreaStyle}
-            className={cropAreaClassName}
+            imageStyle={{
+              width: this.imageSize.width,
+              height: this.imageSize.height,
+              minHeight: this.imageSize.height,
+            }}
+            className={imageClassName}
           />
-        )}
+          {this.state.cropSize && (
+            <CropArea
+              cropShape={cropShape}
+              showGrid={showGrid}
+              style={{
+                width: this.state.cropSize.width,
+                height: this.state.cropSize.height,
+              }}
+              data-testid="cropper"
+              cropAreaStyle={cropAreaStyle}
+              className={cropAreaClassName}
+            />
+          )}
+        </Mask>
       </Container>
     )
   }
@@ -386,6 +392,7 @@ Cropper.defaultProps = {
   style: {},
   classes: {},
   zoomSpeed: 1,
+  maskUrl: null,
 }
 
 export default Cropper

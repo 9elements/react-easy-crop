@@ -2214,7 +2214,7 @@ styleSheet.flush()
         Object.defineProperty(exports, '__esModule', {
           value: true,
         })
-        exports.CropArea = exports.Img = exports.Container = undefined
+        exports.CropArea = exports.Mask = exports.Img = exports.Container = undefined
 
         var _extends =
           Object.assign ||
@@ -2274,6 +2274,20 @@ styleSheet.flush()
           }
         ))
 
+        var Mask = (exports.Mask = (0, _reactEmotion2.default)('div')(
+          {
+            width: '100%',
+            height: '100%',
+            maskSize: 'contain',
+            maskRepeat: 'noRepeat',
+            maskPosition: 'center',
+          },
+          function(_ref3) {
+            var maskStyle = _ref3.maskStyle
+            return _extends({}, maskStyle)
+          }
+        ))
+
         var lineBorder = '1px solid rgba(255, 255, 255, 0.5)'
         var cropperLines = {
           content: '" "',
@@ -2314,10 +2328,10 @@ styleSheet.flush()
           borderRadius: '50%',
         }
 
-        var CropArea = (exports.CropArea = (0, _reactEmotion2.default)('div')({}, function(_ref3) {
-          var cropShape = _ref3.cropShape,
-            showGrid = _ref3.showGrid,
-            cropAreaStyle = _ref3.cropAreaStyle
+        var CropArea = (exports.CropArea = (0, _reactEmotion2.default)('div')({}, function(_ref4) {
+          var cropShape = _ref4.cropShape,
+            showGrid = _ref4.showGrid,
+            cropAreaStyle = _ref4.cropAreaStyle
           return _extends(
             {},
             (function() {
@@ -2949,37 +2963,45 @@ styleSheet.flush()
                     },
                     className: containerClassName,
                   },
-                  _react2.default.createElement(_styles.Img, {
-                    src: this.props.image,
-                    innerRef: function innerRef(el) {
-                      return (_this3.image = el)
-                    },
-                    onLoad: this.onImgLoad,
-                    onError: this.props.onImgError,
-                    alt: '',
-                    style: {
-                      transform:
-                        'translate(' + patchedX + 'px, ' + patchedY + 'px) scale(' + zoom + ')',
-                    },
-                    imageStyle: {
-                      width: this.imageSize.width,
-                      height: this.imageSize.height,
-                      minHeight: this.imageSize.height,
-                    },
-                    className: imageClassName,
-                  }),
-                  this.state.cropSize &&
-                    _react2.default.createElement(_styles.CropArea, {
-                      cropShape: cropShape,
-                      showGrid: showGrid,
-                      style: {
-                        width: this.state.cropSize.width,
-                        height: this.state.cropSize.height,
+                  _react2.default.createElement(
+                    _styles.Mask,
+                    {
+                      maskStyle: {
+                        maskUrl: this.props.maskUrl,
                       },
-                      'data-testid': 'cropper',
-                      cropAreaStyle: cropAreaStyle,
-                      className: cropAreaClassName,
-                    })
+                    },
+                    _react2.default.createElement(_styles.Img, {
+                      src: this.props.image,
+                      innerRef: function innerRef(el) {
+                        return (_this3.image = el)
+                      },
+                      onLoad: this.onImgLoad,
+                      onError: this.props.onImgError,
+                      alt: '',
+                      style: {
+                        transform:
+                          'translate(' + patchedX + 'px, ' + patchedY + 'px) scale(' + zoom + ')',
+                      },
+                      imageStyle: {
+                        width: this.imageSize.width,
+                        height: this.imageSize.height,
+                        minHeight: this.imageSize.height,
+                      },
+                      className: imageClassName,
+                    }),
+                    this.state.cropSize &&
+                      _react2.default.createElement(_styles.CropArea, {
+                        cropShape: cropShape,
+                        showGrid: showGrid,
+                        style: {
+                          width: this.state.cropSize.width,
+                          height: this.state.cropSize.height,
+                        },
+                        'data-testid': 'cropper',
+                        cropAreaStyle: cropAreaStyle,
+                        className: cropAreaClassName,
+                      })
+                  )
                 )
               },
             },
@@ -3009,6 +3031,7 @@ styleSheet.flush()
           style: {},
           classes: {},
           zoomSpeed: 1,
+          maskUrl: null,
         }
 
         exports.default = Cropper
