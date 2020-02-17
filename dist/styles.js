@@ -70,6 +70,7 @@ var Mask = (exports.Mask = (0, _reactEmotion2.default)('div')(
     maskSize: 'contain',
     maskRepeat: 'no-repeat',
     maskPosition: 'center',
+    margin: '0 auto',
   },
   function(_ref3) {
     var maskStyle = _ref3.maskStyle

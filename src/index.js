@@ -345,6 +345,8 @@ class Cropper extends React.Component {
         <Mask
           maskStyle={{
             maskImage: !!this.props.maskUrl ? `url(${this.props.maskUrl})` : null,
+            width: this.state.cropSize ? this.state.cropSize.width : '100%',
+            height: this.state.cropSize ? this.state.cropSize.height : '100%',
           }}
         >
           <Img

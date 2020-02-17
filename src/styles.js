@@ -37,6 +37,7 @@ export const Mask = styled('div')(
     maskSize: 'contain',
     maskRepeat: 'no-repeat',
     maskPosition: 'center',
+    margin: '0 auto',
   },
   ({ maskStyle }) => ({ ...maskStyle })
 )

@@ -2281,6 +2281,7 @@ styleSheet.flush()
             maskSize: 'contain',
             maskRepeat: 'no-repeat',
             maskPosition: 'center',
+            margin: '0 auto',
           },
           function(_ref3) {
             var maskStyle = _ref3.maskStyle
@@ -2968,6 +2969,8 @@ styleSheet.flush()
                     {
                       maskStyle: {
                         maskImage: !!this.props.maskUrl ? 'url(' + this.props.maskUrl + ')' : null,
+                        width: this.state.cropSize ? this.state.cropSize.width : '100%',
+                        height: this.state.cropSize ? this.state.cropSize.height : '100%',
                       },
                     },
                     _react2.default.createElement(_styles.Img, {
