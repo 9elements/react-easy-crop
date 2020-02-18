@@ -32,6 +32,7 @@ export const Img = styled('img')(
 
 export const Mask = styled('div')(
   {
+    position: 'relative',
     width: '100%',
     height: '100%',
     maskSize: 'contain',

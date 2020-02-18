@@ -2276,6 +2276,7 @@ styleSheet.flush()
 
         var Mask = (exports.Mask = (0, _reactEmotion2.default)('div')(
           {
+            position: 'relative',
             width: '100%',
             height: '100%',
             maskSize: 'contain',
